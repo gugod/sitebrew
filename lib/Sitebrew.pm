@@ -1,4 +1,5 @@
 package Sitebrew;
+# ABSTRACT: Static site builder.
 use MooseX::Singleton;
 use IO::All;
 use Text::Markdown ();
