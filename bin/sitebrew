@@ -16,7 +16,8 @@ use Path::Class;
 use Sitebrew;
 use Sitebrew::Article;
 
-Sitebrew->initialize(app_root => io->curdir->absolute->name);
+my $app_root = $ENV{SITEBREW_ROOT} || io->curdir->absolute->name;
+Sitebrew->initialize(app_root => $app_root);
 
 sub copy_assets {
     my $source = shift;
@@ -56,7 +57,7 @@ sub build_all {
         my $markdown_mtime = io($markdown_file)->mtime;
 
         if (!-f $html_file || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime) {
-            system "sitebrew-one", $markdown_file;
+            system $^X, "$FindBin::RealBin/sitebrew-one", $markdown_file;
         }
     };
 
@@ -89,3 +90,4 @@ sub build_all {
 }
 
 build_all;
+

@@ -15,7 +15,8 @@ use DateTime::Format::Mail;
 use Sitebrew;
 use Sitebrew::Article;
 
-Sitebrew->initialize(app_root => io->curdir->absolute->name);
+my $app_root = $ENV{SITEBREW_ROOT} || io->curdir->absolute->name;
+Sitebrew->initialize(app_root => $app_root);
 
 sub markdown_file :lvalue {
     state $markdown_file

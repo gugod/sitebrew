@@ -122,24 +122,12 @@ sub each {
     my ($class, $cb) = @_;
     my $app_root = Sitebrew->instance->app_root;
 
-    my @content_files;
+    my @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } io->catdir($app_root, "content")->sort(0)->All_Files;
 
-    find({
-        wanted => sub {
-            return unless -f $_ && /\.md$/;
-            push @content_files, $_;
-        },
-        no_chdir => 1,
-        follow => 1
-    }, io->catdir($app_root, 'content')->name);
-
-    for my $content_file (@content_files) {
-        my $article = $class->new(content_file => $content_file);
+    for (@content_files) {
+        my $article = $class->new(content_file => $_->name);
         my $result = $cb->($article);
-
-        if (defined($result) && !$result) {
-            last;
-        }
+        last if defined($result) && !$result;
     }
 }
 
