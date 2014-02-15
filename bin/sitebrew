@@ -3,16 +3,14 @@ use v5.14;
 use FindBin;
 use lib "$FindBin::Bin/lib";
 
-use File::Find;
-use Text::Markdown qw(markdown);
-use IO::All -utf8;
-use File::Copy;
+use IO::All -utf8; # io()
+use File::Find qw(find);
+use File::Copy qw(copy);
 use YAML;
 use List::MoreUtils qw(any);
-use AnyEvent;
-use AnyEvent::Worker;
-use Data::RoundRobin;
-use Path::Class;
+
+use Parallel::ForkManager;
+
 use Sitebrew;
 use Sitebrew::Article;
 
@@ -49,7 +47,6 @@ sub build_all {
         }
     }
 
-    my $builder_cv = AnyEvent->condvar;
     my $builder_sub = sub {
         my $markdown_file = shift;
         my $html_file  = $markdown_file =~ s/\.md$/.html/r =~ s/^content/public/r;
@@ -61,20 +58,18 @@ sub build_all {
         }
     };
 
-    my $builders = Data::RoundRobin->new(
-        AnyEvent::Worker->new($builder_sub),
-        AnyEvent::Worker->new($builder_sub)
-    );
 
-    for my $article (@articles) {
-        $builder_cv->begin;
-
-        $builders->next->do(
-            $article->content_file, sub {
-                $builder_cv->end;
-            }
-        );
+    my $articles_count = @articles;
+    my $worker_count = 4;
+    my $forkman = Parallel::ForkManager->new( $worker_count );
+    for (1..$worker_count) {
+        my $pid = $forkman->start and next;
+        for (my $i = 0; $i < $articles_count; $i += $worker_count) {
+            $builder_sub->( $articles[$i]->content_file )
+        }
+        $forkman->finish;
     }
+    $forkman->wait_all_children;
 
     find +{
         wanted => sub {
@@ -85,7 +80,6 @@ sub build_all {
         follow => 1
     }, "content";
 
-    $builder_cv->recv;
     say 'ALL DONE';
 }
 
