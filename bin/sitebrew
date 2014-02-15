@@ -54,10 +54,14 @@ sub build_all {
         my $markdown_mtime = io($markdown_file)->mtime;
 
         if (!-f $html_file || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime) {
-            system $^X, "$FindBin::RealBin/sitebrew-one", $markdown_file;
+            my $cmd = Sitebrew::Cmd::One->new( markdown_file => $markdown_file );
+            $cmd->run;
+            say "BUILD " . $cmd->markdown_file . " => " . $cmd->html_file;
+        }
+        else {
+            say "SKIP  " . $markdown_file;
         }
     };
-
 
     my $articles_count = @articles;
     my $worker_count = 4;
