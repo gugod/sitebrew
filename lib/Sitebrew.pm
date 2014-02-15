@@ -9,9 +9,9 @@ use Sitebrew::Article;
 use Text::Xslate;
 
 has app_root => (
-    is => "rw",
+    is => "ro",
     isa => "Str",
-    required => 1
+    lazy_build => 1,
 );
 
 has config => (
@@ -25,6 +25,10 @@ has local_time_zone => (
     isa => "DateTime::TimeZone",
     lazy_build => 1
 );
+
+sub _build_app_root {
+    return $ENV{SITEBREW_ROOT} || io->curdir->absolute->name;
+}
 
 sub _build_config {
     my $self = shift;
