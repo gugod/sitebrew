@@ -115,7 +115,8 @@ sub _build_content_digest {
 sub summary {
     my $self = shift;
     my $dom = Mojo::DOM->new( Sitebrew->markdown($self->body) );
-    return $dom->find("p")->[0]->all_text;
+    my $first_p = $dom->find("p")->[0] or return "";
+    return $first_p->all_text;
 }
 
 sub each {
