@@ -39,6 +39,16 @@ sub _build_local_time_zone {
     DateTime::TimeZone->new(name => 'local');
 }
 
+sub xslate {
+    my ($self) = @_;
+
+    return Text::Xslate->new(
+        input_layer => ":utf8",
+        path => ['views', 'layouts'],
+        function => Sitebrew->helpers
+    );
+}
+
 sub markdown {
     my ($self, $text, @options) = @_;
 

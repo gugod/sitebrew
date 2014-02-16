@@ -27,17 +27,10 @@ package Sitebrew::Cmd::Build {
     sub run {
         my $self = shift;
         my $view_name = $self->template;
-
-        my $tx = Text::Xslate->new(
-            input_layer => ":utf8",
-            path => ['views', 'layouts'],
-            function => Sitebrew->helpers
-        );
-
+        my $tx = Sitebrew->xslate;
         my $html = $tx->render("${view_name}.tx");
 
         io("public/${view_name}.html")->print($html);
-
         return 1;
     }
 };
