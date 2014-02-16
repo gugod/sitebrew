@@ -1,8 +1,4 @@
-#!/bin/sh
-#! -*- perl -*-
-eval 'exec perl -x -wS $0 ${1+"$@"}'
-    if 0;
-
+#!/usr/bin/env perl
 use v5.14;
 use FindBin;
 use lib "$FindBin::Bin/lib";

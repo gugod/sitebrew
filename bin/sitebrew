@@ -87,5 +87,15 @@ sub build_all {
     say 'ALL DONE';
 }
 
-build_all;
+if (@ARGV) {
+    my $cmd = shift @ARGV;
+    my $cmd_module = "Sitebrew::Cmd::" . ucfirst(lc($cmd));
+    say STDERR "cmd_module = $cmd_module";
 
+    eval "use $cmd_module; 1;" or do { die( $@ || "Unknown error" ) };
+
+    $cmd_module->new(@ARGV)->run;
+}
+else {
+    build_all;
+}
