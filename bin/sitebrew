@@ -13,9 +13,7 @@ use Parallel::ForkManager;
 
 use Sitebrew;
 use Sitebrew::Article;
-
-my $app_root = $ENV{SITEBREW_ROOT} || io->curdir->absolute->name;
-Sitebrew->initialize(app_root => $app_root);
+use Sitebrew::Cmd::One;
 
 sub copy_assets {
     my $source = shift;
