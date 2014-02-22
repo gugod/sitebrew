@@ -27,6 +27,13 @@ package Sitebrew::Cmd::One {
         return $self->markdown_file =~ s/\.md$/.html/r =~ s/^content/public/r;
     }
 
+    around 'BUILDARGS' => sub {
+        my $orig = shift;
+        my $class = shift;
+        return $class->new(markdown_file => $_[0]) if @_ == 1 && !ref $_[0];
+        return $class->$orig(@_);
+    };
+
     sub run {
         my $self = shift;
         my $article = Sitebrew::Article->new( content_file => $self->markdown_file );
