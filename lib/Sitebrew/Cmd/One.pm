@@ -2,9 +2,7 @@ use v5.14;
 
 package Sitebrew::Cmd::One {
     use Moose;
-
     use Text::Xslate;
-    use IO::All -utf8;
     use YAML;
     use DateTime::Format::Mail;
     use Sitebrew;
@@ -43,7 +41,7 @@ package Sitebrew::Cmd::One {
             title => $title
         });
 
-        io($self->html_file)->assert->print($html);
+        Sitebrew::io($self->html_file)->assert->print($html);
     }
 };
 1;

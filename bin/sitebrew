@@ -3,7 +3,6 @@ use v5.14;
 use FindBin;
 use lib "$FindBin::Bin/lib";
 
-use IO::All -utf8; # io()
 use File::Find qw(find);
 use File::Copy qw(copy);
 use YAML;
@@ -19,13 +18,13 @@ sub copy_assets {
     my $source = shift;
     my $destination = $source =~ s/^content/public/r;
 
-    my $x = io->file($destination);
-    if ($x->exists && $x->mtime > io($source)->mtime ) {
+    my $x = Sitebrew::io->file($destination);
+    if ($x->exists && $x->mtime > Sitebrew::io($source)->mtime ) {
         # say "SKIP $source => $destination";
     }
     else {
         say "COPY $source => $destination";
-        io->dir("".file($destination)->parent)->mkpath;
+        Sitebrew::io->dir("".file($destination)->parent)->mkpath;
         copy($source, $destination)
             or die "copy failed: $!";
 
@@ -36,10 +35,10 @@ sub copy_assets {
 sub build_all {
     my @articles = Sitebrew::Article->all;
 
-    my @view_mtime = ( io("views/article.tx")->mtime );
+    my @view_mtime = ( Sitebrew::io("views/article.tx")->mtime );
 
     for (qw(article default)) {
-        my $f = io("views/$_-layout.tx");
+        my $f = Sitebrew::io("views/$_-layout.tx");
         if ($f->exists) {
             push @view_mtime, $f->mtime
         }
@@ -48,8 +47,8 @@ sub build_all {
     my $builder_sub = sub {
         my $markdown_file = shift;
         my $html_file  = $markdown_file =~ s/\.md$/.html/r =~ s/^content/public/r;
-        my $html_mtime = io($html_file)->mtime;
-        my $markdown_mtime = io($markdown_file)->mtime;
+        my $html_mtime = Sitebrew::io($html_file)->mtime;
+        my $markdown_mtime = Sitebrew::io($markdown_file)->mtime;
 
         if (!-f $html_file || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime) {
             my $cmd = Sitebrew::Cmd::One->new( markdown_file => $markdown_file );

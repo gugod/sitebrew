@@ -3,7 +3,6 @@ use utf8;
 
 package Sitebrew::Cmd::Buildatom {
     use Moose;
-    use IO::All -utf8;
     use XML::Feed;
     use Encode;
     use Sitebrew;
@@ -34,7 +33,7 @@ package Sitebrew::Cmd::Buildatom {
             });
         }
 
-        io("public/atom.xml")->print( Encode::decode_utf8($feed->as_xml) );
+        Sitebrew::io("public/atom.xml")->print( Encode::decode_utf8($feed->as_xml) );
         say "DONE: public/atom.xml";
     }
 };

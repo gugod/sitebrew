@@ -4,7 +4,6 @@ use v5.14;
 use Moose;
 use utf8;
 use File::Find;
-use IO::All -utf8;
 use YAML;
 use File::stat;
 use Digest::SHA1 qw(sha1_hex);
@@ -57,7 +56,7 @@ has href => (
 
 sub _build_title_and_body {
     my ($self) = @_;
-    my $content_text = io($self->content_file)->utf8->all;
+    my $content_text = Sitebrew::io($self->content_file)->utf8->all;
     my ($first_line) = $content_text =~ m/\A(.+)\n/;
 
     my $title = $first_line =~ s/^#+ //r;
@@ -123,7 +122,7 @@ sub each {
     my ($class, $cb) = @_;
     my $app_root = Sitebrew->instance->app_root;
 
-    my @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } io->catdir($app_root, "content")->sort(0)->All_Files;
+    my @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } Sitebrew::io->catdir($app_root, "content")->sort(0)->All_Files;
 
     for (@content_files) {
         my $article = $class->new(content_file => $_->name);

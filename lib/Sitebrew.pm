@@ -1,7 +1,7 @@
 package Sitebrew;
 # ABSTRACT: Static site builder.
 use MooseX::Singleton;
-use IO::All;
+use IO::All -utf8;
 use Text::Markdown ();
 use DateTime::TimeZone;
 use Sitebrew::Config;
@@ -27,7 +27,7 @@ has local_time_zone => (
 );
 
 sub _build_app_root {
-    return $ENV{SITEBREW_ROOT} || io->curdir->absolute->name;
+    return $ENV{SITEBREW_ROOT} || io()->curdir->absolute->name;
 }
 
 sub _build_config {

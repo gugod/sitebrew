@@ -1,7 +1,6 @@
 use v5.14;
 package Sitebrew::Cmd::Build {
     use Moose;
-    use IO::All -utf8;
     use Text::Xslate;
     use Sitebrew;
 
@@ -30,7 +29,7 @@ package Sitebrew::Cmd::Build {
         my $tx = Sitebrew->xslate;
         my $html = $tx->render("${view_name}.tx");
 
-        io("public/${view_name}.html")->print($html);
+        Sitebrew::io("public/${view_name}.html")->print($html);
         return 1;
     }
 };
