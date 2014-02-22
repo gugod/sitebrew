@@ -19,10 +19,13 @@ package Sitebrew::Cmd::One {
         is => "ro",
         isa => "Str",
         documentation => "The html file to be generated. Derived from `markdown_file` attribute.",
-        default => sub {
-            return $_[0]->markdown_file =~ s/\.md$/.html/r =~ s/^content/public/r;
-        }
+        lazy_build => 1,
     );
+
+    sub _build_html_file {
+        my $self = shift;
+        return $self->markdown_file =~ s/\.md$/.html/r =~ s/^content/public/r;
+    }
 
     sub run {
         my $self = shift;
