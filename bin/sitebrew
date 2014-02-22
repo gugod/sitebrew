@@ -58,7 +58,7 @@ sub build_all {
     };
 
     my $articles_count = @articles;
-    my $worker_count = 4;
+    my $worker_count = 8;
     my $forkman = Parallel::ForkManager->new( $worker_count );
     for (1..$worker_count) {
         my $pid = $forkman->start and next;
