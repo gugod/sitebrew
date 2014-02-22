@@ -1,11 +1,8 @@
 #!/usr/bin/env perl
 use v5.14;
-use FindBin;
-use lib "$FindBin::Bin/lib";
 
 use File::Find qw(find);
 use File::Copy qw(copy);
-use YAML;
 use List::MoreUtils qw(any);
 
 use Parallel::ForkManager;
