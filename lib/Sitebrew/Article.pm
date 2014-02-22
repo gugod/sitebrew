@@ -12,7 +12,7 @@ use Sitebrew;
 use DateTime;
 use DateTimeX::Easy;
 use File::Slurp qw(read_file);
-use Mojo::DOM;
+use Web::Query;
 
 has content_file => (
     is => "rw",
@@ -114,9 +114,9 @@ sub _build_content_digest {
 
 sub summary {
     my $self = shift;
-    my $dom = Mojo::DOM->new( Sitebrew->markdown($self->body) );
-    my $first_p = $dom->find("p")->[0] or return "";
-    return $first_p->all_text;
+    my $html = "<div>" . Sitebrew->markdown($self->body) . "</div>";
+    my $dom = Web::Query->new_from_html( $html );
+    return $dom->find("p")->first->text;
 }
 
 sub each {
