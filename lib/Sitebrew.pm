@@ -1,5 +1,8 @@
 package Sitebrew;
 # ABSTRACT: Static site builder.
+use v5.14;
+our $VERSION = "1.0";
+
 use MooseX::Singleton;
 use IO::All -utf8;
 use Text::Markdown ();
