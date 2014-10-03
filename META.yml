@@ -8,7 +8,7 @@ configure_requires:
   CPAN::Meta: '0'
   ExtUtils::MakeMaker: '6.59'
 dynamic_config: '0'
-generated_by: 'Module::Install version 1.10, CPAN::Meta::Converter version 2.140640'
+generated_by: 'Module::Install version 1.12, CPAN::Meta::Converter version 2.142690'
 license: mit
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -43,7 +43,7 @@ requires:
   namespace::autoclean: '0'
   perl: v5.14.0
 resources:
-  license: http://www.opensource.org/licenses/mit-license.php
+  license: http://opensource.org/licenses/mit-license.php
   repository: https://github.com/gugod/sitebrew
 version: '1.0'
 x_module_name: Sitebrew
