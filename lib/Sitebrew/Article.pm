@@ -26,6 +26,12 @@ has content_digest => (
     builder => "_build_content_digest"
 );
 
+has attributes => (
+    is => "rw",
+    isa => "HashRef",
+    lazy_build => 1,
+);
+
 has title => (
     is => "rw",
     isa => "Str",
@@ -81,17 +87,23 @@ sub _build_body {
     return $self->body;
 }
 
-sub _build_published_at {
+sub _build_attributes {
     my $self = shift;
-    my $attr_file = $self->content_file =~ s{(/[^/]+)\.md}{$1_attributes.yml}r;
-
+    my $attr_file = $self->content_file =~ s{(/[^/]+)\.md}{$1.attributes.yml}r;
     my $attrs = {};
-
     if (-f $attr_file) {
         $attrs = YAML::LoadFile($attr_file);
-        $attrs->{published_at} = DateTimeX::Easy->parse_datetime( $attrs->{DATE} );
     }
-    else {
+    return $attrs;
+}
+
+sub _build_published_at {
+    my $self = shift;
+    my $attrs = $self->attributes;
+
+    if (exists($attrs->{DATE})) {
+        $attrs->{published_at} = DateTimeX::Easy->parse_datetime( $attrs->{DATE} );
+    } else {
         $attrs->{published_at} = DateTime->from_epoch( epoch => stat($self->content_file)->mtime );
     }
 
