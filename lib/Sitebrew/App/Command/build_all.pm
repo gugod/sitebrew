@@ -80,7 +80,7 @@ sub execute {
 
     find +{
         wanted => sub {
-            return if !-f || /\.DS_Store/ || /\.git/ || /(\.md|_attributes\.yml)\z/ || $File::Find::dir =~ /(sass|\.git)/;
+            return if !-f || /\.DS_Store/ || /\.git/ || /(\.md|\.attributes\.yml)\z/ || $File::Find::dir =~ /(sass|\.git)/;
             copy_assets($File::Find::name);
         },
         no_chdir => 1,
