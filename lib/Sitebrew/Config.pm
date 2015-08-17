@@ -14,6 +14,18 @@ has url_base => (
     coerce => 1
 );
 
+has content_path => (
+    is => "ro",
+    isa => "Str",
+    default => "content"
+);
+
+has public_path => (
+    is => "ro",
+    isa => "Str",
+    default => "public"
+);
+
 use namespace::autoclean;
 use YAML ();
 

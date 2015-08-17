@@ -14,8 +14,11 @@ sub opt_spec {
 sub execute {
     my ($self, $opt, $args) = @_;
 
+    my $content_path = Sitebrew->config->content_path;
+    my $public_path = Sitebrew->config->public_path;
+
     my $markdown_file = $args->[0];
-    my $html_file = $markdown_file =~ s/\.md$/.html/r =~ s/^content/public/r;
+    my $html_file = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
 
     my $article = Sitebrew::Article->new( content_file => $markdown_file );
     my $title = $article->title;

@@ -12,13 +12,17 @@ use File::Find qw(find);
 use File::Copy qw(copy);
 use List::MoreUtils qw(any);
 use Parallel::ForkManager;
+use Path::Class;
 
 sub opt_spec {
 }
 
 sub copy_assets {
-    my $source = shift;
-    my $destination = $source =~ s/^content/public/r;
+    my ($source) = @_;
+
+    my $content_path = Sitebrew->config->content_path;
+    my $public_path = Sitebrew->config->public_path;
+    my $destination = $source =~ s<^\Q${content_path}\E><\Q${public_path}\E>r;
 
     my $x = Sitebrew::io->file($destination);
     if ($x->exists && $x->mtime > Sitebrew::io($source)->mtime ) {
