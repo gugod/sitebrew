@@ -1,4 +1,6 @@
 package Sitebrew::App::Command::build;
+# ABSTRACT: build one template.
+
 use v5.14;
 use warnings;
 
@@ -20,7 +22,8 @@ sub execute {
     my $tx = Sitebrew->xslate;
     my $html = $tx->render("${view_name}.tx");
 
-    Sitebrew::io("public/${view_name}.html")->print($html);
+    my $public_path = Sitebrew->config->public_path;
+    Sitebrew::io("${public_path}/${view_name}.html")->print($html);
     return 1;
 }
 

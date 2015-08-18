@@ -114,7 +114,8 @@ sub _build_published_at {
 
 sub _build_href {
     my $self = shift;
-    return $self->content_file =~ s{^content/}{/}r =~ s/.md$/.html/r =~ s/\/index.html$/\//r;
+    my $content_path = Sitebrew->config->content_path;
+    return $self->content_file =~ s{^${content_path}/}{/}r =~ s/.md$/.html/r =~ s/\/index.html$/\//r;
 }
 
 sub _build_content_digest {

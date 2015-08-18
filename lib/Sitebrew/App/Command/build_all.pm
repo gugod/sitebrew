@@ -1,4 +1,6 @@
 package Sitebrew::App::Command::build_all;
+# ABSTRACT: build all content
+
 use v5.14;
 use warnings;
 
@@ -54,7 +56,10 @@ sub execute {
 
     my $builder_sub = sub {
         my $markdown_file = shift;
-        my $html_file  = $markdown_file =~ s/\.md$/.html/r =~ s/^content/public/r;
+        my $content_path = Sitebrew->config->content_path;
+        my $public_path = Sitebrew->config->public_path;
+
+        my $html_file  = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
         my $html_mtime = Sitebrew::io($html_file)->mtime;
         my $markdown_mtime = Sitebrew::io($markdown_file)->mtime;
 
