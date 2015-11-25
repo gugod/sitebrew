@@ -1,3 +1,4 @@
+requires "App::Cmd" => 0;
 requires "DateTime" => 0;
 requires "DateTime::Format::Mail" => 0;
 requires "DateTime::TimeZone" => 0;
