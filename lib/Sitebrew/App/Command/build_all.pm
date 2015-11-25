@@ -10,6 +10,7 @@ use Sitebrew::App::Command::one;
 use Sitebrew;
 use Sitebrew::Article;
 
+use Path::Class qw(file);
 use File::Find qw(find);
 use File::Copy qw(copy);
 use List::MoreUtils qw(any);
