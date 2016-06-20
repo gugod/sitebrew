@@ -18,6 +18,10 @@ use Parallel::ForkManager;
 use Path::Class;
 
 sub opt_spec {
+    return (
+        [ "force|f",   "Ignore the timestamp check and rebuild everything anyway." ],
+        [ "dry-run",   "Do not build anything, just print the messages as if they are actually done." ],
+    );
 }
 
 sub copy_assets {
@@ -29,7 +33,7 @@ sub copy_assets {
 
     my $x = Sitebrew::io->file($destination);
     if ($x->exists && $x->mtime > Sitebrew::io($source)->mtime ) {
-        # say "SKIP $source => $destination";
+        say "SKIP $source => $destination";
     }
     else {
         say "COPY $source => $destination";
@@ -64,7 +68,7 @@ sub execute {
         my $html_mtime = Sitebrew::io($html_file)->mtime;
         my $markdown_mtime = Sitebrew::io($markdown_file)->mtime;
 
-        if (!-f $html_file || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime) {
+        if (($opt->{force}) || (!-f $html_file || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime)) {
             Sitebrew::App::Command::one::execute(undef, {}, [$markdown_file]);
             say "BUILD " . $markdown_file . " => " . $html_file;
         } else {
