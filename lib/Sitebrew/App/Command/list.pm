@@ -8,12 +8,17 @@ use Sitebrew::Article;
 
 sub opt_spec {
     return (
+        [ "site=s",   "A directory to your site." ],
         [ "dry-run",   "Do not move the message, just display the result." ],
     );
 }
 
 sub execute {
     my ($self, $opt) = @_;
+
+    if ($opt->{site} && -d $opt->{site}) {
+        $ENV{SITEBREW_ROOT} = $opt->{site};
+    }
 
     binmode(STDOUT, ":utf8");
     for (Sitebrew::Article->all) {
