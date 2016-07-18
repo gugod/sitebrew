@@ -1,4 +1,5 @@
 package Sitebrew::App::Command::list;
+#ABSTRACT: list buildable contents
 use v5.14;
 use warnings;
 
