@@ -60,9 +60,22 @@ has href => (
     builder => "_build_href"
 );
 
-sub _build_title_and_body {
+sub __load_file {
     my ($self) = @_;
-    my $content_text = Sitebrew::io($self->content_file)->utf8->all;
+    my $content = Sitebrew::io($self->content_file)->utf8->all;
+    my ($front_part, $content_text);
+
+    if (substr($content, 0, 4) eq "---\n") {
+        ($front_part, $content_text) = split /\n---\n/, $content, 2;
+    } else {
+        $front_part = "---\n";
+        $content_text = $content;
+    }
+
+    $content_text =~ s/\A\s+//;
+
+    my $attr = YAML::Load($front_part) // {};
+
     my ($first_line) = $content_text =~ m/\A(.+)\n/;
 
     my $title = $first_line =~ s/^#+ //r;
@@ -73,28 +86,25 @@ sub _build_title_and_body {
 
     $self->title($title);
     $self->body($content_text);
+    $self->attributes($attr);
 }
 
 sub _build_title {
     my ($self) =  @_;
-    $self->_build_title_and_body;
+    $self->__load_file;
     return $self->title;
 }
 
 sub _build_body {
     my ($self) =  @_;
-    $self->_build_title_and_body;
+    $self->__load_file;
     return $self->body;
 }
 
 sub _build_attributes {
-    my $self = shift;
-    my $attr_file = $self->content_file =~ s{(/[^/]+)\.md}{$1.attributes.yml}r;
-    my $attrs = {};
-    if (-f $attr_file) {
-        $attrs = YAML::LoadFile($attr_file);
-    }
-    return $attrs;
+    my ($self) = @_;
+    $self->__load_file;
+    return $self->attributes;
 }
 
 sub _build_published_at {
