@@ -1,5 +1,6 @@
 requires "App::Cmd" => 0;
 requires "DateTime" => 0;
+requires "DateTime::Format::Atom" => 0;
 requires "DateTime::Format::Mail" => 0;
 requires "DateTime::TimeZone" => 0;
 requires "DateTimeX::Easy" => 0;
@@ -13,6 +14,7 @@ requires "Parallel::ForkManager" => 0;
 requires "Text::Markdown" => 0;
 requires "Text::Xslate" => 0;
 requires "Web::Query" => 0;
+requires "XML::Atom" => 0;
 requires "XML::Feed" => 0;
 requires "YAML" => 0;
 requires "namespace::autoclean" => 0;
