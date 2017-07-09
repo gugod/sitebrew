@@ -30,7 +30,7 @@ has local_time_zone => (
 );
 
 sub _build_app_root {
-    return $ENV{SITEBREW_ROOT} || io()->curdir->absolute->name;
+    return io()->curdir->absolute->name;
 }
 
 sub _build_config {
