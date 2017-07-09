@@ -143,9 +143,9 @@ sub summary {
 
 sub each {
     my ($class, $cb) = @_;
-    my $app_root = Sitebrew->instance->app_root;
+    my $site_root = Sitebrew->instance->site_root;
 
-    my @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } Sitebrew::io->catdir($app_root, "content")->sort(0)->All_Files;
+    my @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } Sitebrew::io->catdir($site_root, "content")->sort(0)->All_Files;
 
     for (@content_files) {
         my $article = $class->new(content_file => $_->name);

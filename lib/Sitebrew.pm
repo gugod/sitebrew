@@ -11,7 +11,7 @@ use Sitebrew::Config;
 use Sitebrew::ContentContainer;
 use Text::Xslate;
 
-has app_root => (
+has site_root => (
     is => "ro",
     isa => "Str",
     lazy_build => 1,
@@ -29,13 +29,13 @@ has local_time_zone => (
     lazy_build => 1
 );
 
-sub _build_app_root {
+sub _build_site_root {
     return io()->curdir->absolute->name;
 }
 
 sub _build_config {
     my $self = shift;
-    Sitebrew::Config->load( io->catfile($self->app_root, ".sitebrew", "config.yml") );
+    Sitebrew::Config->load( io->catfile($self->site_root, ".sitebrew", "config.yml") );
 }
 
 sub _build_local_time_zone {

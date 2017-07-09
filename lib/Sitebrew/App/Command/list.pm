@@ -18,7 +18,7 @@ sub execute {
     my ($self, $opt) = @_;
 
     if ($opt->{site} && -d $opt->{site}) {
-        Sitebrew->initialize( app_root => $opt->{site});
+        Sitebrew->initialize( site_root => $opt->{site});
     }
 
     binmode(STDOUT, ":utf8");
