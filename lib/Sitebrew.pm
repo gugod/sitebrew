@@ -45,9 +45,14 @@ sub _build_local_time_zone {
 sub xslate {
     my ($self) = @_;
 
+    my $site_root = $self->site_root;
+
     return Text::Xslate->new(
         input_layer => ":utf8",
-        path => ['views', 'layouts'],
+        path => [
+            $site_root . '/views',
+            $site_root . '/layouts'
+        ],
         function => Sitebrew->helpers
     );
 }
