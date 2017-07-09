@@ -23,10 +23,10 @@ sub execute {
 
     binmode(STDOUT, ":utf8");
     for (Sitebrew::ContentContainer->all) {
-        say $_->title;
-        say "\t", $_->published_at;
-        say "\t", $_->href;
-        say "\t", $_->content_file;
+        say "title:\t" . $_->title;
+        say "published_at: \t", $_->published_at;
+        say "href: \t", $_->href;
+        say "content_file: \t", $_->content_file;
         say "----";
     }
 
