@@ -21,7 +21,7 @@ sub execute {
     my $markdown_file = $args->[0];
     my $html_file = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
 
-    my $article = Sitebrew::Article->new( content_file => $markdown_file );
+    my $article = Sitebrew::ContentContainer->new( content_file => $markdown_file );
     my $title = $article->title;
 
     my $tx = Text::Xslate->new( path => ['views', 'layouts']);

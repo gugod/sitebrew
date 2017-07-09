@@ -5,7 +5,7 @@ use warnings;
 
 use Sitebrew::App -command;
 
-use Sitebrew::Article;
+use Sitebrew::ContentContainer;
 
 sub opt_spec {
     return (
@@ -22,7 +22,7 @@ sub execute {
     }
 
     binmode(STDOUT, ":utf8");
-    for (Sitebrew::Article->all) {
+    for (Sitebrew::ContentContainer->all) {
         say $_->title;
         say "\t", $_->published_at;
         say "\t", $_->href;

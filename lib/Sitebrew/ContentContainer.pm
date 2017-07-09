@@ -1,4 +1,4 @@
-package Sitebrew::Article;
+package Sitebrew::ContentContainer;
 use v5.14;
 
 use Moose;

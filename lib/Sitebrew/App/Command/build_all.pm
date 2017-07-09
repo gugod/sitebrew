@@ -8,7 +8,7 @@ use Sitebrew::App -command;
 use Sitebrew::App::Command::one;
 
 use Sitebrew;
-use Sitebrew::Article;
+use Sitebrew::ContentContainer;
 
 use Path::Class qw(file);
 use File::Find qw(find);
@@ -48,7 +48,7 @@ sub copy_assets {
 sub execute {
     my ($self, $opt) = @_;
 
-    my @articles = Sitebrew::Article->all;
+    my @articles = Sitebrew::ContentContainer->all;
 
     my @view_mtime = ( Sitebrew::io("views/article.tx")->mtime );
 

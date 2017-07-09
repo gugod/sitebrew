@@ -8,7 +8,7 @@ use IO::All -utf8;
 use Text::Markdown ();
 use DateTime::TimeZone;
 use Sitebrew::Config;
-use Sitebrew::Article;
+use Sitebrew::ContentContainer;
 use Text::Xslate;
 
 has app_root => (
@@ -79,9 +79,9 @@ sub helpers {
             my $n = shift;
 
             if (defined($n) && $n > 0) {
-                return [Sitebrew::Article->first($n)]
+                return [Sitebrew::ContentContainer->first($n)]
             }
-            return [Sitebrew::Article->all]
+            return [Sitebrew::ContentContainer->all]
         }
     }
 }
