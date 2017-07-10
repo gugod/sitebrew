@@ -6,6 +6,7 @@ use warnings;
 use Sitebrew::App -command;
 
 use Sitebrew::ContentContainer;
+use Sitebrew::ContentIterator;
 
 sub opt_spec {
     return (
@@ -22,14 +23,16 @@ sub execute {
     }
 
     binmode(STDOUT, ":utf8");
-    for (Sitebrew::ContentContainer->all) {
-        say "title:\t" . $_->title;
-        say "published_at: \t", $_->published_at;
-        say "href: \t", $_->href;
-        say "content_file: \t", $_->content_file;
-        say "----";
-    }
-
+    Sitebrew::ContentIterator->each(
+        sub {
+            local $_ = $_[0];
+            say "title:\t" . $_->title;
+            say "published_at: \t", $_->published_at;
+            say "href: \t", $_->href;
+            say "content_file: \t", $_->content_file;
+            say "----";
+        }
+    );
 }
 
 1;

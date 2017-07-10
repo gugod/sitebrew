@@ -9,6 +9,7 @@ use Text::Markdown ();
 use DateTime::TimeZone;
 use Sitebrew::Config;
 use Sitebrew::ContentContainer;
+use Sitebrew::ContentIterator;
 use Text::Xslate;
 
 has site_root => (
@@ -84,9 +85,9 @@ sub helpers {
             my $n = shift;
 
             if (defined($n) && $n > 0) {
-                return [Sitebrew::ContentContainer->first($n)]
+                return [Sitebrew::ContentIterator->first($n)]
             }
-            return [Sitebrew::ContentContainer->all]
+            return [Sitebrew::ContentIterator->all]
         }
     }
 }

@@ -10,7 +10,7 @@ use XML::Feed;
 use Encode;
 
 use Sitebrew;
-use Sitebrew::ContentContainer;
+use Sitebrew::ContentIterator;
 
 sub opt_spec {
     return (
@@ -23,7 +23,7 @@ sub execute {
     my $content_path = Sitebrew->config->content_path;
     my $public_path = Sitebrew->config->public_path;
 
-    my @articles = Sitebrew::ContentContainer->first(25);
+    my @articles = Sitebrew::ContentIterator->first(25);
     my $brewer = Sitebrew->instance;
     my $feed = XML::Feed->new("Atom", version => 1.0);
 
