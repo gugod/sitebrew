@@ -34,9 +34,14 @@ sub all {
 
 sub each {
     my ($class, $cb) = @_;
+    my @content_files;
+
     my $site_root = Sitebrew->instance->site_root;
 
-    my @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } Sitebrew::io->catdir($site_root, "content")->sort(0)->All_Files;
+    my $content_dir = Sitebrew::io->catdir($site_root, "content");
+    if ($content_dir->exists) {
+        @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } $content_dir->sort(0)->All_Files;
+    }
 
     for (@content_files) {
         my $x = Sitebrew::ContentContainer->new(content_file => $_->name);
