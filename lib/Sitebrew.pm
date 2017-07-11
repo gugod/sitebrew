@@ -36,7 +36,17 @@ sub _build_site_root {
 
 sub _build_config {
     my $self = shift;
-    Sitebrew::Config->load( io->catfile($self->site_root, ".sitebrew", "config.yml") );
+    my $config_file = io->catfile($self->site_root, ".sitebrew", "config.yml");
+    if ($config_file->exists) {
+        return Sitebrew::Config->load($config_file);
+    } else {
+        return Sitebrew::Config->new(
+            title        => "Example Site",
+            url_base     => "http://example.com",
+            content_path => "content",
+            public_path  => "public",
+        );
+    }
 }
 
 sub _build_local_time_zone {
