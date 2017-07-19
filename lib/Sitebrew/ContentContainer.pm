@@ -151,3 +151,19 @@ sub summary {
 
 
 1;
+
+__END__
+
+=head1 NAME
+
+Sitebrew::ContentContainer
+
+=head1 DESCRIPTION
+
+This ContentContainer object maps to a bunch of properties of a
+markdown file. Each markdown file in the "content" directory is
+mapped to an object of "ContentContainer".
+
+To iterate over ContentContainer objects, see ContentIterator.
+
+=cut
