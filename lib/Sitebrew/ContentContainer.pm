@@ -12,6 +12,7 @@ use DateTime;
 use DateTimeX::Easy;
 use File::Slurp qw(read_file);
 use Web::Query;
+use URI;
 
 has content_file => (
     is => "rw",
@@ -124,8 +125,15 @@ sub _build_published_at {
 
 sub _build_href {
     my $self = shift;
-    my $content_path = Sitebrew->config->content_path;
-    return $self->content_file =~ s{^${content_path}/}{/}r =~ s/.md$/.html/r =~ s/\/index.html$/\//r;
+    my $config = Sitebrew->instance->config;
+    my $content_path = $config->content_path;
+
+    my $url_base = $config->url_base;
+
+    my $path = $self->content_file =~ s{^${content_path}/}{/}r =~ s/.md$/.html/r =~ s/\/index.html$/\//r;
+    my $full_url = URI->new($url_base);
+    $full_url->path($path);
+    return "$full_url";
 }
 
 sub _build_content_digest {

@@ -13,6 +13,7 @@ requires "MooseX::Types::URI" => 0;
 requires "Parallel::ForkManager" => 0;
 requires "Text::Markdown" => 0;
 requires "Text::Xslate" => 0;
+requires "URI" => 0;
 requires "Web::Query" => 0;
 requires "XML::Atom" => 0;
 requires "XML::Feed" => 0;
