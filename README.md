@@ -13,9 +13,10 @@ Features
 
 - Authoring with markdown, produce HTML.
 - The URL path is the dir path of markdown file.
-- The content dir can be seperated, or the same as HTML.
-- Metadata is defined inline in each markdown file.
-- xslate for html layout and templating.
+- The content (and HTML) is organized in-place. The same PATH as their URLs.
+- The content dir could be seperated, or the same as HTML.
+- Markdown files can optionally have metadata, which is available in templates.
+- xslate is the templating engine of choice.
 - generate atom feed
 
 Examples
