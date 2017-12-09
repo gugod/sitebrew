@@ -12,8 +12,6 @@ use DateTimeX::Easy;
 use File::Slurp qw(read_file);
 use Web::Query;
 use URI;
-use File::Next;
-use File::Spec;
 
 has content_file => (
     is => "rw",
@@ -150,33 +148,7 @@ sub summary {
     return $dom->find("p")->first->text;
 }
 
-sub each {
-    my ($class, $cb) = @_;
-    my $app_root = Sitebrew->instance->app_root;
-
-    my $files = File::Next::files(
-        +{
-            descend_filter => sub { $_ ne '.git' },
-            file_filter => sub { /\.md$/i }
-        },
-        File::Spec->catdir($app_root, "content"),
-    );
-    while ( defined( my $file = $files->() ) ) {
-        my $article = $class->new(content_file => "$file");
-        my $result = $cb->($article);
-        last if defined($result) && !$result;
-    }
-}
-
-sub all {
-    my ($class) = @_;
-    $class->each(
-        sub {
-            push @articles, $_[0];
-            return 1;
-        }
-    );
-}
+1;
 
 =head1 NAME
 

@@ -3,6 +3,8 @@ use Moose;
 
 use Sitebrew;
 use Sitebrew::ContentContainer;
+use File::Next;
+
 
 sub first {
     my ($class, $count) = @_;
@@ -24,13 +26,13 @@ sub all {
 
     $class->each(
         sub {
-            push @articles, $_[0]
+            push @articles, $_[0];
+            return 1;
         }
     );
 
     return sort { $b->published_at <=> $a->published_at } @articles;
 }
-
 
 sub each {
     my ($class, $cb) = @_;
@@ -39,14 +41,20 @@ sub each {
     my $site_root = Sitebrew->instance->site_root;
 
     my $content_dir = Sitebrew::io->catdir($site_root, "content");
-    if ($content_dir->exists) {
-        @content_files = sort { $b->mtime <=> $a->mtime } grep { /\.md$/ } $content_dir->sort(0)->All_Files;
-    }
 
-    for (@content_files) {
-        my $x = Sitebrew::ContentContainer->new(content_file => $_->name);
-        my $result = $cb->($x);
-        last if defined($result) && !$result;
+    if ($content_dir->exists) {
+        my $files = File::Next::files(
+            +{
+                descend_filter => sub { $_ ne '.git' },
+                file_filter => sub { /\.md$/i }
+            },
+            "$content_dir",
+        );
+        while ( defined( my $file = $files->() ) ) {
+            my $article = Sitebrew::ContentContainer->new(content_file => "$file");
+            my $result = $cb->($article);
+            last if defined($result) && !$result;
+        }
     }
 }
 
