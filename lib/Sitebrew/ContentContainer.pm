@@ -3,7 +3,6 @@ use v5.14;
 
 use Moose;
 use utf8;
-use File::Find;
 use YAML;
 use File::stat;
 use Digest::SHA1 qw(sha1_hex);
@@ -13,6 +12,8 @@ use DateTimeX::Easy;
 use File::Slurp qw(read_file);
 use Web::Query;
 use URI;
+use File::Next;
+use File::Spec;
 
 has content_file => (
     is => "rw",
@@ -149,10 +150,33 @@ sub summary {
     return $dom->find("p")->first->text;
 }
 
+sub each {
+    my ($class, $cb) = @_;
+    my $app_root = Sitebrew->instance->app_root;
 
-1;
+    my $files = File::Next::files(
+        +{
+            descend_filter => sub { $_ ne '.git' },
+            file_filter => sub { /\.md$/i }
+        },
+        File::Spec->catdir($app_root, "content"),
+    );
+    while ( defined( my $file = $files->() ) ) {
+        my $article = $class->new(content_file => "$file");
+        my $result = $cb->($article);
+        last if defined($result) && !$result;
+    }
+}
 
-__END__
+sub all {
+    my ($class) = @_;
+    $class->each(
+        sub {
+            push @articles, $_[0];
+            return 1;
+        }
+    );
+}
 
 =head1 NAME
 
