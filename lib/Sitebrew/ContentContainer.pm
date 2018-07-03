@@ -148,6 +148,7 @@ sub summary {
     return $dom->find("p")->first->text;
 }
 
+no Moose;
 1;
 
 =head1 NAME

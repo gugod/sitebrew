@@ -5,7 +5,6 @@ use Sitebrew;
 use Sitebrew::ContentContainer;
 use File::Next;
 
-
 sub first {
     my ($class, $count) = @_;
     $count ||= 1;
@@ -36,7 +35,7 @@ sub all {
 
 sub each {
     my ($class, $cb) = @_;
-    my @content_files;
+    
 
     my $site_root = Sitebrew->instance->site_root;
 
@@ -58,4 +57,5 @@ sub each {
     }
 }
 
+no Moose;
 1;
