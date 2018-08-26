@@ -44,14 +44,14 @@ sub execute {
     my $content_path = Sitebrew->config->content_path;
     for my $article (@articles) {
         next if $article->content_file eq "${content_path}/index.md";
-        my $id = $brewer->config->url_base . $article->href . '?' . $article->content_digest;
+        my $id = $article->href . '?' . $article->content_digest;
         if ($existing{$id}) {
             $feed->add_entry($existing{$id});
         } else {
             $feed->add_entry(do {
                 my $x = XML::Feed::Entry->new;
                 $x->id($id);
-                $x->link($brewer->config->url_base . $article->href);
+                $x->link($article->href);
                 $x->title($article->title);
                 $x->modified($article->published_at);
                 $x->author($ENV{USER});
