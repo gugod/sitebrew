@@ -114,10 +114,11 @@ sub _build_published_at {
     if (exists($attrs->{DATE})) {
         $attrs->{published_at} = DateTimeX::Easy->parse_datetime( $attrs->{DATE} );
     } else {
-        $attrs->{published_at} = DateTime->from_epoch( epoch => stat($self->content_file)->mtime );
+        $attrs->{published_at} = DateTime->from_epoch(
+            epoch => stat($self->content_file)->mtime,
+            time_zone => Sitebrew->local_time_zone,
+        );
     }
-
-    $attrs->{published_at}->set_time_zone( Sitebrew->local_time_zone );
 
     return $attrs->{published_at};
 }
