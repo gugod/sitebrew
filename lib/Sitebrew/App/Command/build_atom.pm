@@ -20,8 +20,16 @@ sub opt_spec {
 sub execute {
     my ($self, $opt) = @_;
 
-    my $content_path = Sitebrew->config->content_path;
     my $public_path = Sitebrew->config->public_path;
+    my %existing;
+    my $atom_path = $public_path . "/atom.xml";
+    if (-f $atom_path) {
+        open my $fh, "<", $atom_path;
+        my $xml = XML::Feed->parse($fh);
+        for my $entry ($xml->entries) {
+            $existing{ $entry->id } = $entry;
+        }
+    }
 
     my @articles = Sitebrew::ContentIterator->first(25);
     my $brewer = Sitebrew->instance;
@@ -33,21 +41,26 @@ sub execute {
     $feed->self_link($brewer->config->url_base . "/atom.xml");
     $feed->modified(DateTime->now);
 
+    my $content_path = Sitebrew->config->content_path;
     for my $article (@articles) {
         next if $article->content_file eq "${content_path}/index.md";
-        $feed->add_entry(do {
-            my $x = XML::Feed::Entry->new;
-            $x->id($brewer->config->url_base . $article->href . '?' . $article->content_digest);
-            $x->link($brewer->config->url_base . $article->href);
-            $x->title($article->title);
-            $x->modified($article->published_at);
-            $x->author($ENV{USER});
-            $x->summary( $article->summary );
-            $x;
-        });
+        my $id = $brewer->config->url_base . $article->href . '?' . $article->content_digest;
+        if ($existing{$id}) {
+            $feed->add_entry($existing{$id});
+        } else {
+            $feed->add_entry(do {
+                my $x = XML::Feed::Entry->new;
+                $x->id($id);
+                $x->link($brewer->config->url_base . $article->href);
+                $x->title($article->title);
+                $x->modified($article->published_at);
+                $x->author($ENV{USER});
+                $x->summary( $article->summary );
+                $x;
+            });
+        }
     }
 
-    my $atom_path = $public_path . "/atom.xml";
     Sitebrew::io($atom_path)->print( Encode::decode_utf8($feed->as_xml) );
     say "DONE: ${atom_path}";
 }
