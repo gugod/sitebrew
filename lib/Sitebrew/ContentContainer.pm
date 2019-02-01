@@ -60,6 +60,13 @@ has href => (
     builder => "_build_href"
 );
 
+has href_relative => (
+    is => "rw",
+    isa => "Str",
+    lazy => 1,
+    builder => "_build_href_relative"
+);
+
 sub __load_file {
     my ($self) = @_;
     my $content = Sitebrew::io($self->content_file)->utf8->all;
@@ -134,6 +141,12 @@ sub _build_href {
     my $full_url = URI->new($url_base);
     $full_url->path($path);
     return "$full_url";
+}
+
+sub _build_href_relative {
+    my $self = shift;
+    my $full_uri = URI->new( $self->href );
+    return "" . $full_uri->path();
 }
 
 sub _build_content_digest {
