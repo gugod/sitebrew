@@ -53,7 +53,7 @@ sub execute {
                 $x->id($id);
                 $x->link($article->href);
                 $x->title($article->title);
-                $x->modified($article->published_at);
+                $x->issued($article->published_at);
                 $x->author($ENV{USER});
                 $x->summary( $article->summary );
                 $x;
