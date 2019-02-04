@@ -118,16 +118,21 @@ sub _build_published_at {
     my $self = shift;
     my $attrs = $self->attributes;
 
-    if (exists($attrs->{DATE})) {
-        $attrs->{published_at} = DateTimeX::Easy->parse_datetime( $attrs->{DATE} );
-    } else {
-        $attrs->{published_at} = DateTime->from_epoch(
+    my $published_at;
+    for (qw(published_at DATE)) {
+        if (exists($attrs->{$_})) {
+            $published_at = DateTimeX::Easy->parse_datetime( $attrs->{$_} );
+        }
+    }
+
+    unless ($published_at) {
+        $published_at = DateTime->from_epoch(
             epoch => stat($self->content_file)->mtime,
             time_zone => Sitebrew->local_time_zone,
         );
     }
 
-    return $attrs->{published_at};
+    return $published_at;
 }
 
 sub _build_href {
