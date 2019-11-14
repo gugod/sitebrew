@@ -30,7 +30,7 @@ sub all {
         }
     );
 
-    return sort { $b->published_at <=> $a->published_at } @articles;
+    return @articles;
 }
 
 sub each {
