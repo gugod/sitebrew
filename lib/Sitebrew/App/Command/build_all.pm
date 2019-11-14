@@ -15,7 +15,6 @@ use Path::Class qw(file);
 use File::Find qw(find);
 use File::Copy qw(copy);
 use List::MoreUtils qw(any);
-use Parallel::ForkManager;
 use Path::Class;
 
 sub opt_spec {
@@ -61,7 +60,6 @@ sub execute {
     my $public_path = Sitebrew->config->public_path;
     my $builder_sub = sub {
         my $markdown_file = shift;
-
         my $html_file  = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
         $html_file = Sitebrew::io($html_file);
         my $html_mtime = $html_file->exists() ? $html_file->mtime : undef;
@@ -74,16 +72,9 @@ sub execute {
     };
 
     my $articles_count = @articles;
-    my $worker_count = 8;
-    my $forkman = Parallel::ForkManager->new( $worker_count );
-    for (1..$worker_count) {
-        my $pid = $forkman->start and next;
-        for (my $i = 0; $i < $articles_count; $i += $worker_count) {
-            $builder_sub->( $articles[$i]->content_file )
-        }
-        $forkman->finish;
+    for my $a (@articles) {
+        $builder_sub->( $a->content_file );
     }
-    $forkman->wait_all_children;
 
     find +{
         wanted => sub {
