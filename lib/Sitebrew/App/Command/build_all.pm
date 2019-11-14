@@ -57,16 +57,17 @@ sub execute {
         }
     }
 
+    my $content_path = Sitebrew->config->content_path;
+    my $public_path = Sitebrew->config->public_path;
     my $builder_sub = sub {
         my $markdown_file = shift;
-        my $content_path = Sitebrew->config->content_path;
-        my $public_path = Sitebrew->config->public_path;
 
         my $html_file  = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
-        my $html_mtime = Sitebrew::io($html_file)->mtime;
+        $html_file = Sitebrew::io($html_file);
+        my $html_mtime = $html_file->exists() ? $html_file->mtime : undef;
         my $markdown_mtime = Sitebrew::io($markdown_file)->mtime;
 
-        if (($opt->{force}) || (!-f $html_file) || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime) {
+        if ($opt->{force} || (! $html_file->exists) || ($markdown_mtime > $html_mtime) || (any { $html_mtime < $_ } @view_mtime)) {
             Sitebrew::App::Command::one::execute(undef, {}, [$markdown_file]);
             say "BUILD " . $markdown_file . " => " . $html_file;
         }
