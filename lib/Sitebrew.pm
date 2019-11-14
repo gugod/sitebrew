@@ -94,10 +94,12 @@ sub helpers {
         articles => sub {
             my $n = shift;
 
+            my @articles = sort { $b->published_at <=> $a->published_at } Sitebrew::ContentIterator->all;
+
             if (defined($n) && $n > 0) {
-                return [Sitebrew::ContentIterator->first($n)]
+                return [ @articles[0..$n-1] ];
             }
-            return [Sitebrew::ContentIterator->all]
+            return \@articles;
         }
     }
 }
