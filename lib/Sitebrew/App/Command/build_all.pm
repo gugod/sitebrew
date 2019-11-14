@@ -33,10 +33,7 @@ sub copy_assets {
     my $destination = $source =~ s<^\Q${content_path}\E><\Q${public_path}\E>r;
 
     my $x = Sitebrew::io->file($destination);
-    if ($x->exists && $x->mtime > Sitebrew::io($source)->mtime ) {
-        say "SKIP $source => $destination";
-    }
-    else {
+    unless ($x->exists && $x->mtime > Sitebrew::io($source)->mtime ) {
         say "COPY $source => $destination";
         Sitebrew::io->dir("".file($destination)->parent)->mkpath;
         copy($source, $destination)
@@ -69,11 +66,9 @@ sub execute {
         my $html_mtime = Sitebrew::io($html_file)->mtime;
         my $markdown_mtime = Sitebrew::io($markdown_file)->mtime;
 
-        if (($opt->{force}) || (!-f $html_file || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime)) {
+        if (($opt->{force}) || (!-f $html_file) || $markdown_mtime > $html_mtime || any { $html_mtime < $_ } @view_mtime) {
             Sitebrew::App::Command::one::execute(undef, {}, [$markdown_file]);
             say "BUILD " . $markdown_file . " => " . $html_file;
-        } else {
-            say "SKIP  " . $markdown_file;
         }
     };
 
