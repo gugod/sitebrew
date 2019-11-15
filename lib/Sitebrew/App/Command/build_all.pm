@@ -16,6 +16,7 @@ use File::Find qw(find);
 use File::Copy qw(copy);
 use List::MoreUtils qw(any);
 use Path::Class;
+use MCE::Loop;
 
 sub opt_spec {
     return (
@@ -59,22 +60,27 @@ sub execute {
     my $content_path = Sitebrew->config->content_path;
     my $public_path = Sitebrew->config->public_path;
     my $builder_sub = sub {
-        my $markdown_file = shift;
-        my $html_file  = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
-        $html_file = Sitebrew::io($html_file);
-        my $html_mtime = $html_file->exists() ? $html_file->mtime : undef;
-        my $markdown_mtime = Sitebrew::io($markdown_file)->mtime;
+        my $article = shift;
 
-        if ($opt->{force} || (! $html_file->exists) || ($markdown_mtime > $html_mtime) || (any { $html_mtime < $_ } @view_mtime)) {
+        my $markdown_file = $article->content_file;
+        my $html_file = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
+        $html_file = Sitebrew::io($html_file);
+
+        my $html_mtime = $html_file->exists() ? $html_file->mtime : undef;
+
+        if ($opt->{force} || (! $html_file->exists)
+            || (any { $html_mtime < $_ } Sitebrew::io($markdown_file)->mtime, @view_mtime)) {
             Sitebrew::App::Command::one::execute(undef, {}, [$markdown_file]);
             say "BUILD " . $markdown_file . " => " . $html_file;
         }
     };
 
     my $articles_count = @articles;
-    for my $a (@articles) {
-        $builder_sub->( $a->content_file );
-    }
+
+    mce_loop {
+        my $chunk_ref = $_[1];
+        $builder_sub->( $_ ) for @$chunk_ref;
+    } @articles;
 
     find +{
         wanted => sub {

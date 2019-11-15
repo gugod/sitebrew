@@ -20,3 +20,4 @@ requires "XML::Feed" => 0;
 requires "YAML" => 0;
 requires "namespace::autoclean" => 0;
 requires "File::Next";
+requires "MCE";
