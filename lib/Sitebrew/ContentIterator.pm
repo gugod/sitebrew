@@ -18,6 +18,16 @@ sub first {
     return splice(@articles, 0, $count);
 }
 
+sub latest {
+    my ($class, $count) = @_;
+    $count ||= 1;
+    if ($count < 1) {
+        return ();
+    }
+    my @articles = sort { $b->published_at <=> $a->published_at } $class->all;
+    return splice(@articles, 0, $count);
+}
+
 sub all {
     my ($class) = @_;
 

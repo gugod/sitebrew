@@ -93,13 +93,8 @@ sub helpers {
 
         articles => sub {
             my $n = shift;
-
-            my @articles = sort { $b->published_at <=> $a->published_at } Sitebrew::ContentIterator->all;
-
-            if (defined($n) && $n > 0) {
-                return [ @articles[0..$n-1] ];
-            }
-            return \@articles;
+            # I wish there's a special value to mean WHATEVER
+            return [ Sitebrew::ContentIterator->latest($n // 9999999999) ];
         }
     }
 }

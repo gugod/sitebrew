@@ -31,7 +31,7 @@ sub execute {
         }
     }
 
-    my @articles = Sitebrew::ContentIterator->first(25);
+    my @articles = Sitebrew::ContentIterator->latest(25);
     my $brewer = Sitebrew->instance;
     my $feed = XML::Feed->new("Atom", version => 1.0);
 
