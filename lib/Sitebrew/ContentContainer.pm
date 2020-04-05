@@ -53,6 +53,20 @@ has published_at => (
     builder => "_build_published_at"
 );
 
+has created_at => (
+    is => "rw",
+    isa => "Maybe[DateTime]",
+    lazy => 1,
+    builder => "_build_created_at"
+);
+
+has updated_at => (
+    is => "rw",
+    isa => "Maybe[DateTime]",
+    lazy => 1,
+    builder => "_build_updated_at"
+);
+
 has href => (
     is => "rw",
     isa => "Str",
@@ -114,25 +128,42 @@ sub _build_attributes {
     return $self->attributes;
 }
 
+sub _build_created_at {
+    my $self = shift;
+    return $self->__parse_datetime_attributes("created_at");
+}
+
+sub _build_updated_at {
+    my $self = shift;
+    return $self->__parse_datetime_attributes("updated_at");
+}
+
 sub _build_published_at {
     my $self = shift;
+    return $self->__parse_datetime_attributes("published_at", "DATE") // $self->_content_file_mtime;
+}
+
+sub __parse_datetime_attributes {
+    my ($self, @attributes) = @_;
+
     my $attrs = $self->attributes;
 
-    my $published_at;
-    for (qw(published_at DATE)) {
-        if (exists($attrs->{$_})) {
-            $published_at = DateTimeX::Easy->parse_datetime( $attrs->{$_} );
-        }
+    my $t;
+    for my $x (@attributes) {
+        next unless exists $attrs->{$x};
+        $t = DateTimeX::Easy->parse_datetime( $attrs->{$x} ) and last;
+        warn "Attribute [$x] cannot be parsed as DateTime. [file=" . $self->content_file . "]\n";
     }
 
-    unless ($published_at) {
-        $published_at = DateTime->from_epoch(
-            epoch => stat($self->content_file)->mtime,
-            time_zone => Sitebrew->local_time_zone,
-        );
-    }
+    return $t;
+}
 
-    return $published_at;
+sub _content_file_mtime {
+    my ($self) = @_;
+    return DateTime->from_epoch(
+        epoch => stat($self->content_file)->mtime,
+        time_zone => Sitebrew->local_time_zone,
+    );
 }
 
 sub _build_href {

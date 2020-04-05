@@ -27,7 +27,9 @@ sub execute {
         sub {
             local $_ = $_[0];
             say "title:\t" . $_->title;
-            say "published_at: \t", $_->published_at;
+            say "published_at: \t", $_->published_at // '(undef)';
+            say "created_at: \t", $_->created_at // '(undef)';
+            say "updated_at: \t", $_->updated_at // '(undef)';
             say "href: \t", $_->href;
             say "content_file: \t", $_->content_file;
             say "----";
