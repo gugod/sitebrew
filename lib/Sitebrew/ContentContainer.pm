@@ -81,6 +81,13 @@ has href_relative => (
     builder => "_build_href_relative"
 );
 
+sub load {
+    my ($class, $file) = @_;
+    my $obj = $class->new( content_file => $file );
+    $obj->__load_file;
+    return $obj;
+}
+
 sub __load_file {
     my ($self) = @_;
     my $content = Sitebrew::io($self->content_file)->utf8->all;
@@ -108,6 +115,8 @@ sub __load_file {
     $self->title($title);
     $self->body($content_text);
     $self->attributes($attr);
+
+    my $eager = $self->updated_at;
 }
 
 sub _build_title {

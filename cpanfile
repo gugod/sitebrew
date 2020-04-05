@@ -2,6 +2,7 @@ requires "App::Cmd" => 0;
 requires "DateTime" => 0;
 requires "DateTime::Format::Atom" => 0;
 requires "DateTime::Format::Mail" => 0;
+requires "DateTime::Format::ISO8601" => 0;
 requires "DateTime::TimeZone" => 0;
 requires "DateTimeX::Easy" => 0;
 requires "Digest::SHA1" => 0;

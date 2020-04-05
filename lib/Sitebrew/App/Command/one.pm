@@ -21,13 +21,15 @@ sub execute {
     my $markdown_file = $args->[0];
     my $html_file = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
 
-    my $article = Sitebrew::ContentContainer->new( content_file => $markdown_file );
+    my $article = Sitebrew::ContentContainer->load( $markdown_file );
     my $title = $article->title;
 
-    my $tx = Text::Xslate->new( path => ['views', 'layouts']);
+    my $tx = Sitebrew->xslate;
     my $html = $tx->render("article.tx", {
         article => {
-            published_at => DateTime::Format::Mail->format_datetime($article->published_at),
+            published_at => $article->published_at,
+            created_at =>  $article->created_at,
+            updated_at =>  $article->updated_at,
             title => $article->title,
             body_html => Text::Xslate::mark_raw(
                 Sitebrew->markdown( $article->body )

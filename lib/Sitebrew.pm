@@ -7,6 +7,8 @@ use MooseX::Singleton;
 use IO::All -utf8;
 use Text::Markdown ();
 use DateTime::TimeZone;
+use DateTime::Format::Mail;
+use DateTime::Format::ISO8601;
 use Sitebrew::Config;
 use Sitebrew::ContentContainer;
 use Sitebrew::ContentIterator;
@@ -64,7 +66,7 @@ sub xslate {
             $site_root . '/views',
             $site_root . '/layouts'
         ],
-        function => Sitebrew->helpers
+        function => $self->helpers,
     );
 }
 
@@ -95,7 +97,17 @@ sub helpers {
             my $n = shift;
             # I wish there's a special value to mean WHATEVER
             return [ Sitebrew::ContentIterator->latest($n // 9999999999) ];
-        }
+        },
+
+        format_datetime_mail => sub {
+            my $o = shift or return '';
+            return DateTime::Format::Mail->format_datetime($o);
+        },
+
+        format_datetime_iso8601 => sub {
+            my $o = shift or return '';
+            return DateTime::Format::ISO8601->format_datetime($o);
+        },
     }
 }
 
