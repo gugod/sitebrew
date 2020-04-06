@@ -8,7 +8,6 @@ use IO::All -utf8;
 use Text::Markdown ();
 use DateTime::TimeZone;
 use DateTime::Format::Mail;
-use DateTime::Format::ISO8601;
 use Sitebrew::Config;
 use Sitebrew::ContentContainer;
 use Sitebrew::ContentIterator;
@@ -106,7 +105,7 @@ sub helpers {
 
         format_datetime_iso8601 => sub {
             my $o = shift or return '';
-            return DateTime::Format::ISO8601->format_datetime($o);
+            return $o->iso8601;
         },
     }
 }
