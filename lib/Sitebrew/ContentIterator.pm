@@ -45,11 +45,10 @@ sub all {
 
 sub each {
     my ($class, $cb) = @_;
-    
 
     my $site_root = Sitebrew->instance->site_root;
 
-    my $content_dir = Sitebrew::io->catdir($site_root, "content");
+    my $content_dir = Sitebrew::io->catdir($site_root, Sitebrew->config->content_path);
 
     if ($content_dir->exists) {
         my $files = File::Next::files(
