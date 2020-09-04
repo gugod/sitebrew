@@ -22,4 +22,4 @@ jobs:
 
       - name: Run help
         run: |
-          perl scripts/sitebrew help
+          perl script/sitebrew help
