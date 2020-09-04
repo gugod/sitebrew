@@ -33,3 +33,9 @@ jobs:
         run: |
           file ./sitebrew
           ./sitebrew help
+
+      - name: Archive PAR-packed executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: par-packaed-sitebrew
+          path: sitebrew
