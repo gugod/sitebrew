@@ -18,8 +18,18 @@ jobs:
       - name: Install Dependencies
         run: |
           cpanm -q -n --no-man-pages App::cpm && \
+          cpm install -g PAR::Packer && \
           cpm install -g
 
-      - name: Run help
+      - name: Run help (src)
         run: |
           perl script/sitebrew help
+
+      - name: PAR::Pack
+        run: |
+          pp -I ./lib -M App::Cmd:: -M Sitebrew:: -o sitebrew script/sitebrew
+
+      - name: Run help (par)
+        run: |
+          file ./sitebrew
+          ./sitebrew help
