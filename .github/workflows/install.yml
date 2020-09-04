@@ -10,13 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+
       - name: Setup Perl environment
         uses: shogo82148/actions-setup-perl@v1.6.2
 
-      - uses: actions/checkout@v2
-
       - name: Install Dependencies
-        uses: shogo82148/actions-setup-perl@v1.6.2
         run: |
           cpanm -q -n --no-man-pages App::cpm && \
           cpm install -g && cpm install -g . && \
