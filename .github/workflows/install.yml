@@ -18,7 +18,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cpanm -q -n --no-man-pages App::cpm && \
-          cpm install -g && cpm install -g . && \
+          cpm install -g
 
       - name: Run help
         run: |
