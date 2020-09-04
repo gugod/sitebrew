@@ -37,5 +37,5 @@ jobs:
       - name: Archive PAR-packed executable
         uses: actions/upload-artifact@v2
         with:
-          name: par-packaed-sitebrew
+          name: sitebrew
           path: sitebrew
