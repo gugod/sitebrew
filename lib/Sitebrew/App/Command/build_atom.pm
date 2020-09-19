@@ -56,6 +56,12 @@ sub execute {
                 $x->issued($article->published_at);
                 $x->author($ENV{USER});
                 $x->summary( $article->summary );
+
+                my $t = $article->tags;
+                if (@$t) {
+                    $x->category(@$t);
+                }
+
                 $x;
             });
         }
