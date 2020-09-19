@@ -32,6 +32,7 @@ sub execute {
             say "updated_at: \t", $_->updated_at // '(undef)';
             say "href: \t", $_->href;
             say "content_file: \t", $_->content_file;
+            say "tags: \t", join(", ", @{ $_->tags });
             say "----";
         }
     );

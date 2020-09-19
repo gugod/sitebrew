@@ -81,6 +81,13 @@ has href_relative => (
     builder => "_build_href_relative"
 );
 
+has tags => (
+    is => "ro",
+    isa => "ArrayRef[Str]",
+    lazy => 1,
+    builder => "_build_tags",
+);
+
 sub load {
     my ($class, $file) = @_;
     my $obj = $class->new( content_file => $file );
@@ -135,6 +142,11 @@ sub _build_attributes {
     my ($self) = @_;
     $self->__load_file;
     return $self->attributes;
+}
+
+sub _build_tags {
+    my $self = shift;
+    return [ split /[, \t]+/, ($self->attributes->{tags} // "") ];
 }
 
 sub _build_created_at {
