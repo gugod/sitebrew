@@ -1,0 +1,41 @@
+name: install
+
+on:
+  push:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Perl environment
+        uses: shogo82148/actions-setup-perl@v1.6.2
+
+      - name: Install Dependencies
+        run: |
+          cpanm -q -n --no-man-pages App::cpm && \
+          cpm install -g PAR::Packer && \
+          cpm install -g
+
+      - name: Run help (src)
+        run: |
+          perl script/sitebrew help
+
+      - name: PAR::Pack
+        run: |
+          pp -I ./lib -M App::Cmd:: -M Sitebrew:: -o sitebrew script/sitebrew
+
+      - name: Run help (par)
+        run: |
+          file ./sitebrew
+          ./sitebrew help
+
+      - name: Archive PAR-packed executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: sitebrew
+          path: sitebrew
