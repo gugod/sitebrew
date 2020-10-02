@@ -39,15 +39,23 @@ sub execute {
     $feed->title($brewer->config->title);
     $feed->link($brewer->config->url_base);
     $feed->self_link($brewer->config->url_base . "/atom.xml");
-    $feed->modified(DateTime->now);
 
+    my $latest_article_published_at = DateTime->from_epoch( epoch => 0 );
     my $content_path = Sitebrew->config->content_path;
     for my $article (@articles) {
         next if $article->content_file eq "${content_path}/index.md";
         my $id = $article->href . '?' . $article->content_digest;
         if ($existing{$id}) {
             $feed->add_entry($existing{$id});
+
+            if ($existing{$id}->issued > $latest_article_published_at) {
+                $latest_article_published_at = $existing{$id}->issued;
+            }
         } else {
+            if ($article->published_at > $latest_article_published_at) {
+                $latest_article_published_at = $article->published_at;
+            }
+
             $feed->add_entry(do {
                 my $x = XML::Feed::Entry->new;
                 $x->id($id);
@@ -66,6 +74,8 @@ sub execute {
             });
         }
     }
+
+    $feed->modified( $latest_article_published_at );
 
     Sitebrew::io($atom_path)->print( Encode::decode_utf8($feed->as_xml) );
     say "DONE: ${atom_path}";
