@@ -21,15 +21,6 @@ sub execute {
     my ($self, $opt) = @_;
 
     my $public_path = Sitebrew->config->public_path;
-    my %existing;
-    my $atom_path = $public_path . "/atom.xml";
-    if (-f $atom_path) {
-        open my $fh, "<", $atom_path;
-        my $xml = XML::Feed->parse($fh);
-        for my $entry ($xml->entries) {
-            $existing{ $entry->id } = $entry;
-        }
-    }
 
     my @articles = Sitebrew::ContentIterator->latest(25);
     my $brewer = Sitebrew->instance;
@@ -45,38 +36,34 @@ sub execute {
     for my $article (@articles) {
         next if $article->content_file eq "${content_path}/index.md";
         my $id = $article->href . '?' . $article->content_digest;
-        if ($existing{$id}) {
-            $feed->add_entry($existing{$id});
 
-            if ($existing{$id}->issued > $latest_article_published_at) {
-                $latest_article_published_at = $existing{$id}->issued;
-            }
-        } else {
-            if ($article->published_at > $latest_article_published_at) {
-                $latest_article_published_at = $article->published_at;
-            }
-
-            $feed->add_entry(do {
-                my $x = XML::Feed::Entry->new;
-                $x->id($id);
-                $x->link($article->href);
-                $x->title($article->title);
-                $x->issued($article->published_at);
-                $x->author($ENV{USER});
-                $x->summary( $article->summary );
-
-                my $t = $article->tags;
-                if (@$t) {
-                    $x->category(@$t);
-                }
-
-                $x;
-            });
+        if ($article->published_at > $latest_article_published_at) {
+            $latest_article_published_at = $article->published_at;
         }
+
+        $feed->add_entry(do {
+            my $x = XML::Feed::Entry->new;
+            $x->id($id);
+            $x->link($article->href);
+            $x->title($article->title);
+            $x->issued($article->published_at);
+            $x->author($ENV{USER});
+            $x->summary( $article->summary );
+
+            say "XXX: " . $article->published_at;
+
+            my $t = $article->tags;
+            if (@$t) {
+                $x->category(@$t);
+            }
+
+            $x;
+        });
+
     }
 
     $feed->modified( $latest_article_published_at );
-
+    my $atom_path = $public_path . "/atom.xml";
     Sitebrew::io($atom_path)->print( Encode::decode_utf8($feed->as_xml) );
     say "DONE: ${atom_path}";
 }
