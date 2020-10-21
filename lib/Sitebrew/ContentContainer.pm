@@ -219,6 +219,11 @@ sub summary {
     return $dom->find("p")->first->text;
 }
 
+sub body_as_html {
+    my $self = shift;
+    return Sitebrew->markdown($self->body);
+}
+
 no Moose;
 1;
 

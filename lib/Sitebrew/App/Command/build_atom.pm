@@ -6,11 +6,13 @@ use warnings;
 
 use Sitebrew::App -command;
 
-use XML::Feed;
-use Encode;
-
 use Sitebrew;
 use Sitebrew::ContentIterator;
+
+use XML::Feed;
+use XML::Feed::Entry;
+use XML::Feed::Content;
+use Encode;
 
 sub opt_spec {
     return (
@@ -48,10 +50,13 @@ sub execute {
             $x->title($article->title);
             $x->issued($article->published_at);
             $x->author($ENV{USER});
-            $x->summary( $article->summary );
-
-            say "XXX: " . $article->published_at;
-
+            $x->content(
+                XML::Feed::Content->new({
+                    type => 'text/html',
+                    body => $article->body_as_html,
+                    base => $brewer->config->url_base,
+                })
+            );
             my $t = $article->tags;
             if (@$t) {
                 $x->category(@$t);
