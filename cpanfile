@@ -23,3 +23,4 @@ requires "YAML" => 0;
 requires "namespace::autoclean" => 0;
 requires "File::Next";
 requires "MCE";
+requires "Syntax::Keyword::Try";

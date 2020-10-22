@@ -224,6 +224,14 @@ sub body_as_html {
     return Sitebrew->markdown($self->body);
 }
 
+sub html_file {
+    my $self = shift;
+    my $content_path = Sitebrew->config->content_path;
+    my $public_path = Sitebrew->config->public_path;
+    my $html_file = $self->content_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
+    return $html_file;
+}
+
 no Moose;
 1;
 

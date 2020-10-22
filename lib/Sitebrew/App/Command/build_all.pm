@@ -15,6 +15,7 @@ use Path::Class qw(file);
 use File::Find qw(find);
 use File::Copy qw(copy);
 use List::MoreUtils qw(any);
+use Syntax::Keyword::Try;
 use Path::Class;
 use MCE::Loop;
 
@@ -57,21 +58,23 @@ sub execute {
         }
     }
 
-    my $content_path = Sitebrew->config->content_path;
-    my $public_path = Sitebrew->config->public_path;
     my $builder_sub = sub {
         my $article = shift;
 
         my $markdown_file = $article->content_file;
-        my $html_file = $markdown_file =~ s/\.md$/.html/r =~ s/^\Q${content_path}\E/\Q${public_path}\E/r;
+        my $html_file = $article->html_file;
         $html_file = Sitebrew::io($html_file);
 
         my $html_mtime = $html_file->exists() ? $html_file->mtime : undef;
 
         if ($opt->{force} || (! $html_file->exists)
             || (any { $html_mtime < $_ } Sitebrew::io($markdown_file)->mtime, @view_mtime)) {
-            Sitebrew::App::Command::one::execute(undef, {}, [$markdown_file]);
-            say "BUILD " . $markdown_file . " => " . $html_file;
+            try {
+                Sitebrew::App::Command::one::execute(undef, {}, [$markdown_file]);
+                say "BUILD " . $markdown_file . " => " . $html_file;
+            } catch($err) {
+                warn "FAIL at building $markdown_file.\n$err\n";
+            }
         }
     };
 
