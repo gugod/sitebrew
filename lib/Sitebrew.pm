@@ -12,6 +12,7 @@ use Sitebrew::Config;
 use Sitebrew::ContentContainer;
 use Sitebrew::ContentIterator;
 use Text::Xslate;
+use Markdent::Simple::Fragment;
 
 has site_root => (
     is => "ro",
@@ -72,7 +73,7 @@ sub xslate {
 sub markdown {
     my ($self, $text, @options) = @_;
 
-    # github markup
+    # GitHub Wiki link
     $text =~ s{(?<!`)\[\[([^\n]+?)\]\](?!`)}{
         my $label = $1;
         my $page = $1 =~ s{ }{-}gr =~ s{/}{-}gr;
@@ -80,8 +81,10 @@ sub markdown {
         "[$label]($page.html)"
     }eg;
 
-    my $tm = Text::Markdown->new(empty_element_suffix => '>');
-    return $tm->markdown($text);
+    return Markdent::Simple::Fragment->new->markdown_to_html(
+        markdown => $text,
+        dialects => 'GitHub',
+    );
 }
 
 sub helpers {
