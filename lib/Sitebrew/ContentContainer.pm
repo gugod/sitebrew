@@ -3,7 +3,8 @@ use v5.14;
 
 use Moose;
 use utf8;
-use YAML;
+use IO::All -utf8;
+use YAML::PP;
 use File::stat;
 use Digest::SHA1 qw(sha1_hex);
 use Sitebrew;
@@ -97,7 +98,7 @@ sub load {
 
 sub __load_file {
     my ($self) = @_;
-    my $content = Sitebrew::io($self->content_file)->utf8->all;
+    my $content = io($self->content_file)->utf8->all;
     my ($front_part, $content_text);
 
     if (substr($content, 0, 4) eq "---\n") {
@@ -109,15 +110,21 @@ sub __load_file {
 
     $content_text =~ s/\A\s+//;
 
-    my $attr = YAML::Load($front_part) // {};
+    my $yaml = YAML::PP->new;
+    my $attr = $yaml->load_string($front_part) // {};
 
-    my ($first_line) = $content_text =~ m/\A(.+)\n/;
-
-    my $title = $first_line =~ s/^#+ //r;
-
-    $content_text =~ s/\A(.+)\n//;
-    $content_text =~ s/\A(=+)\n//;
-    $content_text =~ s/\A\s+//s;
+    my $title;
+    if (Sitebrew->config->github_wiki) {
+        $title = io($self->content_file)->filename =~ s/\.md$//r =~ s/-/ /gr;
+    } else {
+        my ($first_line) = $content_text =~ m/\A(.+)\n/;
+        $title = $first_line =~ s/^#+ //r;
+        if (defined $title) {
+            $content_text =~ s/\A(.+)\n//;
+            $content_text =~ s/\A(=+)\n//;
+            $content_text =~ s/\A\s+//s;
+        }
+    }
 
     $self->title($title);
     $self->body($content_text);
