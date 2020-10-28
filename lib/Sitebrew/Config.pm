@@ -26,12 +26,19 @@ has public_path => (
     default => "public"
 );
 
+has github_wiki => (
+    is => 'ro',
+    isa => 'Bool',
+    default => 0,
+);
+
 use namespace::autoclean;
-use YAML ();
+use YAML::PP;
 
 sub load {
     my ($class, $file) = @_;
-    my $config = YAML::LoadFile($file);
+    my $yaml = YAML::PP->new;
+    my $config = $yaml->load_file($file);
 
     return $class->new(%$config);
 }

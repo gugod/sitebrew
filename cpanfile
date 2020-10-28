@@ -19,7 +19,7 @@ requires "URI" => 0;
 requires "Web::Query" => 0;
 requires "XML::Atom" => 0;
 requires "XML::Feed" => 0;
-requires "YAML" => 0;
+requires "YAML::PP" => 0;
 requires "namespace::autoclean" => 0;
 requires "File::Next";
 requires "MCE";

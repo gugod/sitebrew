@@ -73,13 +73,15 @@ sub xslate {
 sub markdown {
     my ($self, $text, @options) = @_;
 
-    # GitHub Wiki link
-    $text =~ s{(?<!`)\[\[([^\n]+?)\]\](?!`)}{
-        my $label = $1;
-        my $page = $1 =~ s{ }{-}gr =~ s{/}{-}gr;
-
-        "[$label]($page.html)"
-    }eg;
+    if ($self->config->github_wiki) {
+        # XXX: A kludge that should be reimplemented as a new
+        # 'Dialect' in Markdent framework.
+        $text =~ s{(?<!`)\[\[([^\n]+?)\]\](?!`)}{
+            my $label = $1;
+            my $page = $1 =~ s{ }{-}gr =~ s{/}{-}gr;
+            "[$label]($page.html)"
+        }eg;
+    }
 
     return Markdent::Simple::Fragment->new->markdown_to_html(
         markdown => $text,
