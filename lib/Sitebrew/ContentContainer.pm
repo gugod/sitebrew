@@ -113,17 +113,14 @@ sub __load_file {
     my $yaml = YAML::PP->new;
     my $attr = $yaml->load_string($front_part) // {};
 
-    my $title;
+    my $first_heading = '';
+    if ($content_text =~ s/\A( \# \s (.+?) \s* \n | (.+?) \s* \n =+ \n )\s+//msx) {
+        $first_heading = $2 // $3;
+    }
+
+    my $title = $first_heading;
     if (Sitebrew->config->github_wiki) {
-        $title = io($self->content_file)->filename =~ s/\.md$//r =~ s/-/ /gr;
-    } else {
-        my ($first_line) = $content_text =~ m/\A(.+)\n/;
-        $title = $first_line =~ s/^#+ //r;
-        if (defined $title) {
-            $content_text =~ s/\A(.+)\n//;
-            $content_text =~ s/\A(=+)\n//;
-            $content_text =~ s/\A\s+//s;
-        }
+        $title ||= io($self->content_file)->filename =~ s/\.md$//r =~ s/-/ /gr;
     }
 
     $self->title($title);
