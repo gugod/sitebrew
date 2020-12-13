@@ -27,6 +27,7 @@ sub execute {
             published_at => $article->published_at,
             created_at =>  $article->created_at,
             updated_at =>  $article->updated_at,
+            tags => $article->tags,,
             title => $article->title,
             body_html => Text::Xslate::mark_raw(
                 Sitebrew->markdown( $article->body )
