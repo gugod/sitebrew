@@ -103,6 +103,17 @@ sub helpers {
             return [ Sitebrew::ContentIterator->latest($n // 9999999999) ];
         },
 
+        datetime_diff_days => sub {
+            my ($d1, $d2) = map { $_->truncate( to => 'day' ) } @_;
+            my $diff = $d1 - $d2;
+            return $diff->in_units('days');
+        },
+
+        format_datetime_date => sub {
+            my $o = shift or return '';
+            return $o->ymd('/');
+        },
+
         format_datetime_mail => sub {
             my $o = shift or return '';
             return DateTime::Format::Mail->format_datetime($o);
