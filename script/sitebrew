@@ -1,11 +1,7 @@
 #!/usr/bin/env perl
-use v5.14;
-use warnings;
+use v5.30;
 
-use FindBin;
-use lib "${FindBin::Bin}/../lib";
 use Sitebrew::App;
-
 binmode STDOUT, ":utf8";
 
 Sitebrew::App->new->run;
