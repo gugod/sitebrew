@@ -1,9 +1,26 @@
 package Sitebrew::ContentIterator;
 use Moose;
-
+use File::Next;
 use Sitebrew;
 use Sitebrew::ContentContainer;
-use File::Next;
+
+sub max {
+    my ($class, $cb) = @_;
+    my $max_elem;
+    my $max_prop;
+    $class->each(
+        sub {
+            my ($elem) = @_;
+            my $prop = $cb->($elem);
+            $max_prop //= $prop;
+            $max_elem //= $elem;
+            if ($prop > $max_prop) {
+                $max_elem = $elem;
+            }
+        }
+    );
+    return $max_elem;
+}
 
 sub first {
     my ($class, $count) = @_;
