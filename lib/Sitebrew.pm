@@ -45,8 +45,8 @@ sub _build_config {
         return Sitebrew::Config->new(
             title        => "Example Site",
             url_base     => "http://example.com",
-            content_path => "content",
-            public_path  => "public",
+            content_path => io->catdir($self->site_root, "content")->name,
+            public_path  => io->catdir($self->site_root, "public")->name,
         );
     }
 }
