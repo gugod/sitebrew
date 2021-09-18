@@ -1,5 +1,19 @@
 package Sitebrew;
-# ABSTRACT: Static site builder.
+
+=head1 Name
+
+sitebrew - Static site-builder
+
+=head1 AUTHOR
+
+Kang-min Liu <gugod@gugod.org>
+
+=head1 LICENSE
+
+CC0
+
+=cut
+
 use v5.14;
 our $VERSION = "1.0";
 
