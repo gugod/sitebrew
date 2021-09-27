@@ -12,7 +12,6 @@ requires "Moose" => 0;
 requires "MooseX::Singleton" => 0;
 requires "MooseX::Types::URI" => 0;
 requires "Parallel::ForkManager" => 0;
-requires "Text::Markdown" => 0;
 requires "Markdent" => 0;
 requires "Text::Xslate" => 0;
 requires "URI" => 0;

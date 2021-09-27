@@ -19,7 +19,6 @@ our $VERSION = "1.0";
 
 use MooseX::Singleton;
 use IO::All -utf8;
-use Text::Markdown ();
 use DateTime::TimeZone;
 use DateTime::Format::Mail;
 use Sitebrew::Config;
