@@ -9,6 +9,7 @@ use Sitebrew::App -command;
 use Sitebrew;
 use Sitebrew::ContentIterator;
 
+use List::MoreUtils qw( any );
 use XML::Feed;
 use XML::Feed::Entry;
 use XML::Feed::Content;
@@ -16,6 +17,8 @@ use Encode;
 
 sub opt_spec {
     return (
+        [ "o=s",   "A output path of atom.xml" ],
+        [ "category=s",   "A category name as the constraint" ],
     );
 }
 
@@ -24,14 +27,19 @@ sub execute {
 
     my $public_path = Sitebrew->config->public_path;
 
-    my @articles = Sitebrew::ContentIterator->latest(25);
+    my @articles = Sitebrew::ContentIterator->all;
+    if ($opt->{category}) {
+        @articles = grep { any { $opt->{category} eq $_ } @{$_->tags} } @articles;
+    }
+    @articles = sort { $b->published_at <=> $a->published_at } @articles;
+    @articles = splice(@articles, 0, 25);
+
     my $brewer = Sitebrew->instance;
     my $feed = XML::Feed->new("Atom", version => 1.0);
 
     $feed->id($brewer->config->url_base->canonical->as_string);
     $feed->title($brewer->config->title);
     $feed->link($brewer->config->url_base);
-    $feed->self_link($brewer->config->url_base . "/atom.xml");
 
     my $latest_article_published_at = DateTime->from_epoch( epoch => 0 );
     my $content_path = Sitebrew->config->content_path;
@@ -61,14 +69,14 @@ sub execute {
             if (@$t) {
                 $x->category(@$t);
             }
-
             $x;
         });
 
     }
 
     $feed->modified( $latest_article_published_at );
-    my $atom_path = $public_path . "/atom.xml";
+    my $atom_path = $opt->{o} || ($public_path . "/atom.xml");
+
     Sitebrew::io($atom_path)->print( Encode::decode_utf8($feed->as_xml) );
     say "DONE: ${atom_path}";
 }
