@@ -9,7 +9,7 @@ use Sitebrew::App -command;
 use Sitebrew;
 use Sitebrew::ContentIterator;
 
-use List::MoreUtils qw( any );
+use List::AllUtils qw( any );
 use XML::Feed;
 use XML::Feed::Entry;
 use XML::Feed::Content;

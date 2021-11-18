@@ -14,7 +14,7 @@ use Sitebrew::ContentIterator;
 use Path::Class qw(file);
 use File::Find qw(find);
 use File::Copy qw(copy);
-use List::MoreUtils qw(any);
+use List::AllUtils qw(any);
 use Syntax::Keyword::Try;
 use Path::Class;
 use MCE::Loop;

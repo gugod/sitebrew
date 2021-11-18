@@ -24,4 +24,4 @@ requires "File::Next";
 requires "MCE";
 requires "Syntax::Keyword::Try";
 requires "Path::Class";
-requires "List::MoreUtils";
+requires "List::AllUtils";
