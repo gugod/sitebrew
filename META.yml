@@ -1,0 +1,66 @@
+---
+abstract: 'Static site-builder'
+author:
+  - 'Kang-min Liu <gugod@gugod.org>'
+build_requires: {}
+configure_requires:
+  Module::Build: '0'
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4231, CPAN::Meta::Converter version 2.150010'
+license: unknown
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: '1.4'
+name: Sitebrew
+provides:
+  Sitebrew:
+    file: lib/Sitebrew.pm
+    version: '1.0'
+  Sitebrew::App:
+    file: lib/Sitebrew/App.pm
+  Sitebrew::App::Command::build:
+    file: lib/Sitebrew/App/Command/build.pm
+  Sitebrew::App::Command::build_all:
+    file: lib/Sitebrew/App/Command/build_all.pm
+  Sitebrew::App::Command::build_atom:
+    file: lib/Sitebrew/App/Command/build_atom.pm
+  Sitebrew::App::Command::list:
+    file: lib/Sitebrew/App/Command/list.pm
+  Sitebrew::App::Command::one:
+    file: lib/Sitebrew/App/Command/one.pm
+  Sitebrew::Config:
+    file: lib/Sitebrew/Config.pm
+  Sitebrew::ContentContainer:
+    file: lib/Sitebrew/ContentContainer.pm
+  Sitebrew::ContentIterator:
+    file: lib/Sitebrew/ContentIterator.pm
+requires:
+  App::Cmd: '0'
+  DateTime: '0'
+  DateTime::Format::Atom: '0'
+  DateTime::Format::ISO8601: '0'
+  DateTime::Format::Mail: '0'
+  DateTime::TimeZone: '0'
+  DateTimeX::Easy: '0'
+  Digest::SHA1: '0'
+  File::Next: '0'
+  File::Slurp: '0'
+  IO::All: '0'
+  List::AllUtils: '0'
+  MCE: '0'
+  Markdent: '0'
+  Moose: '0'
+  MooseX::Singleton: '0'
+  MooseX::Types::URI: '0'
+  Parallel::ForkManager: '0'
+  Path::Class: '0'
+  Syntax::Keyword::Try: '0'
+  Text::Xslate: '0'
+  URI: '0'
+  Web::Query: '0'
+  XML::Atom: '0'
+  XML::Feed: '0'
+  YAML::PP: '0'
+  namespace::autoclean: '0'
+version: '1.0'
+x_serialization_backend: 'CPAN::Meta::YAML version 0.018'

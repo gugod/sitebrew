@@ -25,3 +25,7 @@ requires "MCE";
 requires "Syntax::Keyword::Try";
 requires "Path::Class";
 requires "List::AllUtils";
+
+on 'configure' => sub {
+    requires "Module::Build";
+};
