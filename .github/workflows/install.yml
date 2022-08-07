@@ -22,7 +22,7 @@ jobs:
 
       - name: Run help (src)
         run: |
-          perl script/sitebrew help
+          perl -I ./lib script/sitebrew help
 
       - name: PAR::Pack
         run: |
