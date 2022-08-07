@@ -8,12 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: perl:5.36
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Setup Perl environment
-        uses: shogo82148/actions-setup-perl@v1.6.2
 
       - name: Install Dependencies
         run: |
