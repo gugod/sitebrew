@@ -165,7 +165,7 @@ sub _build_updated_at {
 
 sub _build_published_at {
     my $self = shift;
-    return $self->__parse_datetime_attributes("published_at", "DATE") // $self->_content_file_mtime;
+    return $self->__parse_datetime_attributes("published_at", "DATE", "updated_at", "created_at") // $self->_content_file_mtime;
 }
 
 sub __parse_datetime_attributes {
