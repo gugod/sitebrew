@@ -26,7 +26,7 @@ jobs:
 
       - name: PAR::Pack
         run: |
-          pp -I ./lib -M App::Cmd:: -M Sitebrew:: -o sitebrew script/sitebrew
+          pp -I ./lib -M App::Cmd:: -M Sitebrew:: -M Markdent:: -o sitebrew script/sitebrew
 
       - name: Run help (par)
         run: |
