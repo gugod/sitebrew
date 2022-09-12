@@ -28,4 +28,5 @@ requires "List::AllUtils";
 
 on 'configure' => sub {
     requires "Module::Build";
+    requires "Module::Build::Prereqs::FromCPANfile";
 };
