@@ -1,6 +1,6 @@
 package Sitebrew::App::Command::one;
 #ABSTRACT: bulid one content (markdown file)
-use v5.14;
+use v5.40;
 use warnings;
 
 use Sitebrew::App -command;

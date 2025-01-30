@@ -14,7 +14,7 @@ CC0
 
 =cut
 
-use v5.14;
+use v5.40;
 our $VERSION = "1.0";
 
 use MooseX::Singleton;

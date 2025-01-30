@@ -1,7 +1,7 @@
 package Sitebrew::App::Command::build_atom;
 # ABSTRACT: build atom feed.
 
-use v5.14;
+use v5.40;
 use warnings;
 
 use Sitebrew::App -command;

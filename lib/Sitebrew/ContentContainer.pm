@@ -1,5 +1,5 @@
 package Sitebrew::ContentContainer;
-use v5.14;
+use v5.40;
 
 use Moose;
 use utf8;
