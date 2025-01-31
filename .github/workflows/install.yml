@@ -8,12 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: perl:5.40
-
     steps:
+      - uses: shogo82148/actions-setup-perl@v1
       - uses: actions/checkout@v4
-
       - name: Install Dependencies
         run: |
           cpanm -q -n --no-man-pages App::cpm && \
