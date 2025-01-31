@@ -25,6 +25,8 @@ requires "MCE";
 requires "Syntax::Keyword::Try";
 requires "Path::Class";
 requires "List::AllUtils";
+requires "PAR";
+requires "PAR::Packer";
 
 on 'configure' => sub {
     requires "Module::Build";
