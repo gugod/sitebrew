@@ -9,28 +9,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Install relocatable-perl
+      - name: Install perlbrew and relocatable-perl
         run: |
-          curl -fsSL https://raw.githubusercontent.com/skaji/relocatable-perl/main/perl-install | bash -s ~/perl
+          curl -L https://install.perlbrew.pl | bash
+          source ~/perl5/perlbrew/etc/bashrc
+          perlbrew install skaji-relocatable-perl-5.40.1.0
+          perlbrew install
+          perlbrew install-cpanm
+          perlbrew install-cpm
+
       - uses: actions/checkout@v4
       - name: Install Dependencies
         run: |
-          export PATH=~/perl/bin:$PATH
+          source ~/perl5/perlbrew/etc/bashrc
+          perlbrew use skaji-relocatable-perl-5.40.1.0
           cpanm -q -n --no-man-pages App::cpm && \
           cpm install -g PAR::Packer && \
           cpm install -g
 
       - name: Run help (src)
         run: |
-          export PATH=~/perl/bin:$PATH
+          source ~/perl5/perlbrew/etc/bashrc
+          perlbrew use skaji-relocatable-perl-5.40.1.0
           perl -I ./lib script/sitebrew help
 
-      - name: PAR::Pack
+      - name: Build PAR-packed executable
         run: |
-          export PATH=~/perl/bin:$PATH
-          ./pp.sh
+          source ~/perl5/perlbrew/etc/bashrc
+          perlbrew use skaji-relocatable-perl-5.40.1.0
+          perlbrew make-pp -o sitebrew ./script/sitebrew
 
-      - name: Run help (par)
+      - name: Run help (PAR-packed)
         run: |
           file ./sitebrew
           ./sitebrew help
