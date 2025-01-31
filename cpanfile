@@ -27,6 +27,8 @@ requires "Path::Class";
 requires "List::AllUtils";
 requires "PAR";
 requires "PAR::Packer";
+requires "Module::Build";
+requires "Module::Build::Prereqs::FromCPANfile";
 
 on 'configure' => sub {
     requires "Module::Build";
