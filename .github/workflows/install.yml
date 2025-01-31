@@ -23,6 +23,7 @@ jobs:
         run: |
           source ~/perl5/perlbrew/etc/bashrc
           perlbrew use skaji-relocatable-perl-5.40.1.0@sitebrew
+          cpm install -g Module::Build::Prereqs::FromCPANfile
           cpm install -g .
 
       - name: Run help (src)
