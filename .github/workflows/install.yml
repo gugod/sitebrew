@@ -23,7 +23,6 @@ jobs:
           source ~/perl5/perlbrew/etc/bashrc
           perlbrew use skaji-relocatable-perl-5.40.1.0
           cpanm -q -n --no-man-pages App::cpm && \
-          cpm install -g PAR::Packer && \
           cpm install -g
 
       - name: Run help (src)
@@ -35,7 +34,8 @@ jobs:
       - name: Build PAR-packed executable
         run: |
           source ~/perl5/perlbrew/etc/bashrc
-          perlbrew use skaji-relocatable-perl-5.40.1.0
+          perlbrew lib create skaji-relocatable-perl-5.40.1.0@sitebrew
+          perlbrew use skaji-relocatable-perl-5.40.1.0@sitebrew
           perlbrew make-pp -i ./script/sitebrew -o sitebrew
 
       - name: Run help (PAR-packed)
