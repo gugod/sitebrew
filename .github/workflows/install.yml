@@ -36,7 +36,7 @@ jobs:
         run: |
           source ~/perl5/perlbrew/etc/bashrc
           perlbrew use skaji-relocatable-perl-5.40.1.0
-          perlbrew make-pp -o sitebrew ./script/sitebrew
+          perlbrew make-pp -i ./script/sitebrew -o sitebrew
 
       - name: Run help (PAR-packed)
         run: |
