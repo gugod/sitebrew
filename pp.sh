@@ -5,7 +5,8 @@ cpm install
 perlprivlibexp=$(perl -MConfig -e 'print $Config{privlibexp}')
 perlarchlibexp=$(perl -MConfig -e 'print $Config{archlibexp}')
 perlversion=$(perl -MConfig -e 'print $Config{version}')
-pp -B \
+
+./local/bin/pp -B \
     -I ./local/lib/perl5 \
     -a "$perlprivlibexp;$perlversion/" \
     -a "$perlarchlibexp;$perlversion/" \

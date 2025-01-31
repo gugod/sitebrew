@@ -28,7 +28,7 @@ jobs:
       - name: PAR::Pack
         run: |
           export PATH=~/perl/bin:$PATH
-          pp -I ./lib -M App::Cmd:: -M Sitebrew:: -M Markdent:: -o sitebrew script/sitebrew
+          ./pp.sh
 
       - name: Run help (par)
         run: |
