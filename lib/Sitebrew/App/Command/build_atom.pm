@@ -77,7 +77,7 @@ sub execute {
     $feed->modified( $latest_article_published_at );
     my $atom_path = $opt->{o} || ($public_path . "/atom.xml");
 
-    Sitebrew::io($atom_path)->print( Encode::decode_utf8($feed->as_xml) );
+    Sitebrew::io($atom_path)->print( $feed->as_xml );
     say "DONE: ${atom_path}";
 }
 
