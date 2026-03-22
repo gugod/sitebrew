@@ -13,29 +13,29 @@ jobs:
         run: |
           curl -L https://install.perlbrew.pl | bash
           source ~/perl5/perlbrew/etc/bashrc
-          perlbrew install skaji-relocatable-perl-5.40.1.0
-          perlbrew lib create skaji-relocatable-perl-5.40.1.0@sitebrew
+          perlbrew install skaji-relocatable-perl-5.42.1.0
+          perlbrew lib create skaji-relocatable-perl-5.42.1.0@sitebrew
           perlbrew install-cpanm
           perlbrew install-cpm
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install It.
         run: |
           source ~/perl5/perlbrew/etc/bashrc
-          perlbrew use skaji-relocatable-perl-5.40.1.0@sitebrew
+          perlbrew use skaji-relocatable-perl-5.42.1.0@sitebrew
           cpm install -g Module::Build::Prereqs::FromCPANfile
           cpm install -g .
 
       - name: Run help (src)
         run: |
           source ~/perl5/perlbrew/etc/bashrc
-          perlbrew use skaji-relocatable-perl-5.40.1.0@sitebrew
+          perlbrew use skaji-relocatable-perl-5.42.1.0@sitebrew
           perl -I ./lib script/sitebrew help
 
       - name: Build PAR-packed executable
         run: |
           source ~/perl5/perlbrew/etc/bashrc
-          perlbrew use skaji-relocatable-perl-5.40.1.0@sitebrew
+          perlbrew use skaji-relocatable-perl-5.42.1.0@sitebrew
           perlbrew make-pp -i ./script/sitebrew -o sitebrew
 
       - name: Run help (PAR-packed)
